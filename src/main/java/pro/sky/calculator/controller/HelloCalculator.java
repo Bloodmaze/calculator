@@ -1,14 +1,18 @@
-package pro.sky.calculator;
+package pro.sky.calculator.controller;
 
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pro.sky.calculator.service.CalculatorService;
+import pro.sky.calculator.service.CalculatorServiceImpl;
+import pro.sky.calculator.service.ZeroDivideException;
 
 @RestController
 @RequestMapping("/calculator")
 public class HelloCalculator {
+    private CalculatorServiceImpl calculatorServiceImpl=new CalculatorServiceImpl();
 
     @GetMapping()
     public String calculator() {
@@ -16,29 +20,29 @@ public class HelloCalculator {
     }
 
     @GetMapping(path = "/plus")
-    public String calculatorPlus(@RequestParam int num1, @RequestParam int num2) {
-        int result = CalculatorService.sum(num1, num2);
+    public String calculatorPlus(@RequestParam Integer num1, @RequestParam Integer num2) {
+        Integer result =calculatorServiceImpl.sum(num1, num2);
         return massage(num1, num2, '+', result);
     }
 
     @GetMapping(path = "/minus")
     public String calculatorMinus(@RequestParam int num1, @RequestParam int num2) {
-        int result = CalculatorService.minus(num1, num2);
+        int result = calculatorServiceImpl.minus(num1, num2);
         return massage(num1, num2, '-', result);
     }
 
     @GetMapping(path = "/multiply")
     public String calculatorMultiply(@RequestParam int num1, @RequestParam int num2) {
-        int result = CalculatorService.multiply(num1, num2);
+        int result = calculatorServiceImpl.multiply(num1, num2);
         return massage(num1, num2, '*', result);
     }
 
     @GetMapping(path = "/divide")
-    public String calculatorDivide(@RequestParam int num1, @RequestParam int num2) {
+    public String calculatorDivide(@RequestParam int num1, @RequestParam int num2) throws ZeroDivideException {
         if (num2 == 0) {
             return "Деление на ноль невозможно!";
         } else {
-            int result = CalculatorService.divide(num1, num2);
+            int result = calculatorServiceImpl.divide(num1, num2);
 
             return massage(num1, num2, '/', result);
         }
